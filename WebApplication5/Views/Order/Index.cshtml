@@ -1,0 +1,140 @@
+﻿@*@Model WebApplication5.Models.OrderSearchArg*@
+
+
+@model WebApplication5.Models.Order
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+
+    <div id="SearchConditionSection">
+        <h3>訂單查詢</h3>
+        @using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "Form1" }))
+        {
+            <table style="border:3px #cccccc solid;">
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.OrderId)
+                    </td>
+                    <td colspan="3">
+
+                        @Html.TextBoxFor(model => model.OrderId)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CustName)
+                    </td>
+                    <td colspan="3">
+
+                        @Html.TextBoxFor(model => model.CustName)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.EmpName)
+                    </td>
+                    <td colspan="3">
+                       @Html.DropDownListFor(model => model.EmpName, (List<SelectListItem>)ViewBag.EmpCodeData)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.ShipperName)
+                    </td>
+                    <td colspan="3">
+                       @Html.DropDownListFor(model => model.ShipperName, (List<SelectListItem>)ViewBag.EmpCodeData)
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Orderdate)
+                    </td>
+                    <td>
+
+                        @Html.TextBoxFor(model => model.Orderdate, new { @type = "date" })
+                    </td>
+                    <td>
+                        @Html.LabelFor(model => model.ShippedDate)
+                    </td>
+                    <td>
+
+                        @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.RequireDdate)
+                    </td>
+                    <td colspan="3">
+                        @Html.TextBoxFor(model => model.RequireDdate, new { @type = "date" })
+
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">
+                        <input type="submit" value="查詢"><input type="reset" value="清除"><input type="button" value="新增訂單" />
+
+                    </td>
+                </tr>
+
+
+            </table>
+        }
+    </div>
+
+
+    <div id="SearchResultSection">
+
+        @if (ViewBag.SearchResult != null)
+        {
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td>訂單編號</td>
+                    <td>客戶名稱</td>
+                    <td>負責員工</td>
+                    <td>出貨公司</td>
+                    <td>訂購日期</td>
+                    <td>出貨日期</td>
+                    <td>需要日期</td>
+
+                </tr>
+                @foreach (var item in (List<WebApplication5.Models.Order>)ViewBag.SearchResult)
+                {
+                    <tr id='@item.OrderId'>
+                        <td>@item.OrderId</td>
+                        <td>@item.CustName</td>
+                        <td>@item.EmpName</td>
+                        <td>@item.ShipperName</td>
+                        <td>@item.Orderdate</td>
+                        <td>@item.ShippedDate</td>
+                        <td>@item.RequireDdate</td>
+                    </tr>
+                }
+
+            </table>
+
+        }
+
+    </div>
+
+
+
+
+</body>
+</html>
