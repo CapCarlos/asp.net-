@@ -35,29 +35,28 @@
 
                 <tr>
                     <td>
-                        @Html.LabelFor(model => model.CustName)
+                        @Html.LabelFor(model => model.CustomerID)
                     </td>
                     <td colspan="3">
 
-                        @Html.TextBoxFor(model => model.CustName)
+                        @Html.TextBoxFor(model => model.CustomerID)
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        @Html.LabelFor(model => model.EmpName)
+                        @Html.LabelFor(model => model.EmployeeID)
                     </td>
                     <td colspan="3">
-                       @Html.DropDownListFor(model => model.EmpName, (List<SelectListItem>)ViewBag.EmpCodeData)
+                        @Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.EmpCodeData)
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @Html.LabelFor(model => model.ShipperName)
+                        @Html.LabelFor(model => model.ShipperID)
                     </td>
                     <td colspan="3">
-                       @Html.DropDownListFor(model => model.ShipperName, (List<SelectListItem>)ViewBag.EmpCodeData)
-
+                        @Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.SCodeData)
                     </td>
                 </tr>
                 <tr>
@@ -118,9 +117,9 @@
                 {
                     <tr id='@item.OrderId'>
                         <td>@item.OrderId</td>
-                        <td>@item.CustName</td>
-                        <td>@item.EmpName</td>
-                        <td>@item.ShipperName</td>
+                        <td>@item.CustomerID</td>
+                        <td>@item.EmployeeID</td>
+                        <td>@item.ShipperID</td>
                         <td>@item.Orderdate</td>
                         <td>@item.ShippedDate</td>
                         <td>@item.RequireDdate</td>

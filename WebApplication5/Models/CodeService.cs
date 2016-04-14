@@ -49,7 +49,7 @@ namespace WebApplication5.Models
         public List<SelectListItem> GetEmp()
         {
             DataTable dt = new DataTable();
-            string sql = @"Select EmployeeID As CodeId,Lastname+'-'+FirstName As CodeName FROM HR.Employees";
+            string sql = @"Select EmployeeID As CodeId,Lastname+FirstName As CodeName FROM HR.Employees";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
@@ -79,6 +79,22 @@ namespace WebApplication5.Models
             }
             return this.MapCodeData(dt);
         }
+
+        public List<SelectListItem> GetShipper()
+        {
+            DataTable dtt = new DataTable();
+            string sqll = @"Select ShipperID As CodeId,CompanyName As CodeName FROM Sales.Shippers";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmmd = new SqlCommand(sqll, conn);
+                SqlDataAdapter sqlAdapterr = new SqlDataAdapter(cmmd);
+                sqlAdapterr.Fill(dtt);
+                conn.Close();
+            }
+            return this.MapCodeData(dtt);
+        }
+
 
         /// <summary>
         /// Maping 代碼資料

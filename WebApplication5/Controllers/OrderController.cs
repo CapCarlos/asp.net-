@@ -16,6 +16,7 @@ namespace WebApplication5.Controllers
         public ActionResult Index()
         {
             ViewBag.EmpCodeData = this.codeService.GetEmp();
+            ViewBag.SCodeData = this.codeService.GetShipper();
             return View();
         }
 
@@ -28,6 +29,7 @@ namespace WebApplication5.Controllers
         public ActionResult Index(Models.OrderSearchArg arg)
         {
             ViewBag.EmpCodeData = this.codeService.GetEmp();
+            ViewBag.SCodeData = this.codeService.GetShipper();
             Models.OrderService orderService = new Models.OrderService();
             ViewBag.SearchResult = orderService.GetOrderByCondtioin(arg);
             return View("Index");

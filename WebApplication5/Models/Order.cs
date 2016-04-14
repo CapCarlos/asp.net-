@@ -24,7 +24,7 @@ namespace WebApplication5.Models
         /// 客戶名稱
         /// </summary>
         [DisplayName("客戶名稱")]
-        public string CustName { get; set; }
+        public string CustomerID { get; set; }
 
 
 
@@ -33,7 +33,7 @@ namespace WebApplication5.Models
         /// </summary>
         /// 
         [DisplayName("負責員工")]
-        public string EmpName { get; set; }
+        public string EmployeeID { get; set; }
 
 
 
@@ -42,7 +42,7 @@ namespace WebApplication5.Models
         /// </summary>
         /// 
         [DisplayName("出貨公司")]
-        public string ShipperName { get; set; }
+        public string ShipperID { get; set; }
 
 
         /// <summary>
