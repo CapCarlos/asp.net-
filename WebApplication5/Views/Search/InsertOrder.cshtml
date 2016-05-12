@@ -1,0 +1,211 @@
+﻿@model WebApplication5.Models.Order
+
+
+@{
+    ViewBag.Title="新增訂單";
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InsertOrder</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <form action="/Search/InsertOrder" method="post">
+        <input name="__RequestVerificationToken" type="hidden" value="l68Zc9_aWnYjYe0izIBsqenR1z2HQPH5M6jrYE1gOeIqFvdDdAPkY1tDBQ5BYTpNPRvTxahAmRSRAxLWb9R4f1ADbv0Eqx-TNnjVvaMNEcA1" />
+        <div class="form-horizontal">
+
+            <div class="container">
+                <h4>新增訂單</h4>
+            </div>
+            <hr />
+
+            <div class="container">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>客戶名稱</td>
+                        <td colspan="3">
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.CustCodeData, "請選擇")
+                                @Html.ValidationMessageFor(model => model.CustomerID)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>負責員工名稱</td>
+                        <td colspan="3">
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.EmpCodeData, "請選擇")
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>訂購日期</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.Orderdate, new { @type = "date" })
+                            </div>
+                        </td>
+                        <td>出貨日期</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date" })
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>需要日期</td>
+                        <td colspan="3">
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.RequireDdate, new { @type = "date" })
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>出貨公司名稱</td>
+                        <td colspan="3">
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.ShipCodeData, "請選擇")
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>運費</td>
+                        <td colspan="3">
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.Freight)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>出貨國家</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShipCountry)
+                            </div>
+                        </td>
+                        <td>出貨城市</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShipCity)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>出貨地區</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShipRegion)
+                            </div>
+                        </td>
+                        <td>郵遞區號</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShipPostalCode)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>出貨地址</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShipAddress)
+                            </div>
+                        </td>
+                        <td>出貨說明</td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.ShipName)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>訂單金額總計</td>
+                        <td colspan="3">
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.OrderId)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="儲存" class="btn btn-default" />
+                                <input type="button" value="回前一頁" class="btn btn-default" onclick="location.href = '/Search/SearchOrder'" />
+                            </div>
+                        </td>
+                    </tr>
+
+                </table></div></div></form>
+                <br><br>
+                訂單明細<br>
+                <a id="addNewDetial" href="#">+新增一筆</a>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>商品</td>
+                        <td>單價</td>
+                        <td>數量</td>
+                        <td>小計</td>
+                        <td></td>
+                    </tr>
+                    <tbody id="tbContent">
+                        @for (int i = 0; i < Model.OrderDetails.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.DropDownListFor(m => Model.OrderDetails[i].ProductId, (List<SelectListItem>)ViewBag.ProductCodeData, "請選擇", new { @class = "ProductId" })</td>
+                                <td>@Html.TextBoxFor(m => Model.OrderDetails[i].UnitPrice, new { @class = "UnitPrice" })</td>
+                                <td>@Html.TextBoxFor(m => Model.OrderDetails[i].Qty, new { @class = "Qty" })</td>
+                                <td></td>
+                                <td><button type="button" class="btnRemove">取消</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+</body>
+</html>
+
+@section scripts{
+    <script type="text/javascript">
+        //明細資料範本
+        var trtemplate = $('#tbContent tr').eq(0).html();
+
+        //新增一列名資料
+        $("#addNewDetial").click(function (e) {
+            $('#tbContent').append('<tr>' + trtemplate + '</tr>');
+        });
+
+        //移除TR
+        $('#tbContent').on('click', '.btnRemove', function () {
+            if ($('#tbContent tr').length > 1)
+                $(this).closest('tr').remove();
+        });
+
+        //表單送出前置換element name 讓Action 可以讀到OrderDetials
+        $('form').submit(function () {
+            for (var i = 0 ; i < $('#tbContent tr').length; i++) {
+                $('.ProductId').eq(i).attr('name', 'OrderDetails[' + i + '].ProductId');
+                $('.Qty').eq(i).attr('name', 'OrderDetails[' + i + '].Qty');
+                $('.UnitPrice').eq(i).attr('name', 'OrderDetails[' + i + '].UnitPrice');
+            }
+        });
+        </script>
+        }
+

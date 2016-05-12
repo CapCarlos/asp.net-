@@ -13,6 +13,7 @@ namespace WebApplication5.Models
 {
     public class CodeService
     {
+        private int prid = -1;
         /// <summary>
         /// 取得DB連線字串
         /// </summary>
@@ -41,15 +42,34 @@ namespace WebApplication5.Models
             }
             return this.MapCodeData(dt);
         }
-
         /// <summary>
         /// 取得員工資料
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetEmp()
+        public List<SelectListItem> GetEmp(int id)
         {
+            prid = id;
             DataTable dt = new DataTable();
-            string sql = @"Select EmployeeID As CodeId,Lastname+FirstName As CodeName FROM HR.Employees";
+            string sql = @"Select EmployeeID As CodeId,Lastname+'-'+Firstname As CodeName FROM HR.Employees";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            return this.MapCodeData(dt);
+        }
+        /// <summary>
+        /// 取得客戶資料
+        /// </summary>
+        /// <returns></returns>
+        public List<SelectListItem> GetCustomer(int id)
+        {
+            prid = id;
+            DataTable dt = new DataTable();
+            string sql = @"Select CustomerId As CodeId,CompanyName As CodeName FROM Sales.Customers";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
@@ -62,13 +82,14 @@ namespace WebApplication5.Models
         }
 
         /// <summary>
-        /// 取得客戶資料
+        /// 取得出貨公司資料
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetCustomer()
+        public List<SelectListItem> GetShipper(int id)
         {
+            prid = id;
             DataTable dt = new DataTable();
-            string sql = @"Select CustomerID As CodeId,CompanyName As CodeName FROM Sales.Customers";
+            string sql = @"Select ShipperID As CodeId,CompanyName As CodeName FROM Sales.Shippers ";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
@@ -79,22 +100,6 @@ namespace WebApplication5.Models
             }
             return this.MapCodeData(dt);
         }
-
-        public List<SelectListItem> GetShipper()
-        {
-            DataTable dtt = new DataTable();
-            string sqll = @"Select ShipperID As CodeId,CompanyName As CodeName FROM Sales.Shippers";
-            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
-            {
-                conn.Open();
-                SqlCommand cmmd = new SqlCommand(sqll, conn);
-                SqlDataAdapter sqlAdapterr = new SqlDataAdapter(cmmd);
-                sqlAdapterr.Fill(dtt);
-                conn.Close();
-            }
-            return this.MapCodeData(dtt);
-        }
-
 
         /// <summary>
         /// Maping 代碼資料

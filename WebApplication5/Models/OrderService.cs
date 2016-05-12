@@ -27,12 +27,69 @@ namespace WebApplication5.Models
         /// <summary>
         /// 新增訂單
         /// </summary>
-        public void InsertOrder()
+        public int InsertOrder(Models.Order order)
         {
+            string sql = @"INSERT INTO Sales.Orders(
+	                        CustomerID,EmployeeID,orderdate,requireddate,shippeddate,shipperid,freight,
+	                        shipname,shipaddress,shipcity,shipregion,shippostalcode,shipcountry
+                        )VALUES(
+							@CustomerID,@EmployeeID,@Orderdate,@RequireDdate,@ShippedDate,@ShipperID,@Freight,
+							@ShipName,@ShipAddress,@ShipCity,@ShipRegion,@ShipPostalCode,@ShipCountry
+						)
+						SELECT SCOPE_IDENTITY()
+						";
+            int orderId;
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@CustomerID", order.CustomerID));
+                cmd.Parameters.Add(new SqlParameter("@EmployeeID", order.EmployeeID));
+                cmd.Parameters.Add(new SqlParameter("@Orderdate", order.Orderdate));
+                cmd.Parameters.Add(new SqlParameter("@RequireDdate", order.RequireDdate));
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", order.ShippedDate));
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", order.ShipperID));
+                cmd.Parameters.Add(new SqlParameter("@Freight", order.Freight));
+                cmd.Parameters.Add(new SqlParameter("@ShipName", order.ShipName));
+                cmd.Parameters.Add(new SqlParameter("@ShipAddress", order.ShipAddress));
+                cmd.Parameters.Add(new SqlParameter("@ShipCity", order.ShipCity));
+                cmd.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion));
+                cmd.Parameters.Add(new SqlParameter("@ShipPostalCode", order.ShipPostalCode));
+                cmd.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
 
-
+                orderId = Convert.ToInt32(cmd.ExecuteScalar());
+                conn.Close();
+            }
+            return orderId;
         }
-    
+
+
+        /// <summary>
+        /// 刪除訂單 By orderId
+        /// </summary>
+        public void DeleteOrderById(String orderId)
+        {
+            try
+            {
+                string sql = "DELETE FROM Sales.Orders Where orderid=@orderid";
+                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@orderid", orderId));
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+
 
         /// <summary>
         /// 依照條件取得訂單資料

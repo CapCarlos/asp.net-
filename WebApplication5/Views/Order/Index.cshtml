@@ -4,7 +4,9 @@
 @model WebApplication5.Models.Order
 
 @{
-    Layout = null;
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
 }
 
 <!DOCTYPE html>
@@ -13,6 +15,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 
@@ -21,7 +24,7 @@
         <h3>訂單查詢</h3>
         @using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "Form1" }))
         {
-            <table style="border:3px #cccccc solid;">
+            <table >
 
                 <tr>
                     <td>
@@ -87,7 +90,7 @@
                 <tr>
                     <td></td>
                     <td colspan="3">
-                        <input type="submit" value="查詢"><input type="reset" value="清除"><input type="button" value="新增訂單" />
+                        <input type="submit" class="btn btn-default" value="查詢"><input type="reset" class="btn btn-default" value="清除"><input type="button" value="新增訂單" class="btn btn-default" onclick="location.href = '/Order/InsertOrder'" />
 
                     </td>
                 </tr>
@@ -111,7 +114,7 @@
                     <td>訂購日期</td>
                     <td>出貨日期</td>
                     <td>需要日期</td>
-
+                    <td></td>
                 </tr>
                 @foreach (var item in (List<WebApplication5.Models.Order>)ViewBag.SearchResult)
                 {
@@ -123,6 +126,10 @@
                         <td>@item.Orderdate</td>
                         <td>@item.ShippedDate</td>
                         <td>@item.RequireDdate</td>
+                        <td>@Html.ActionLink("修改", "Update", new { id = item.OrderId })
+                            <a class="btnDelete" href="#">刪除</a>
+                            <input class="hidOrderId" type="hidden" value='@item.OrderId' />
+                        </td>
                     </tr>
                 }
 
@@ -132,8 +139,31 @@
 
     </div>
 
+    <script type="text/javascript">
+
+        $(".btnDelete").click(function (e) {
+            console.log("delete");
+            var tr = $(this).closest('tr')
+            $.ajax({
+                type: "POST",
+                url: "/Order/DeleteOrder",
+                data: "orderId="+$(this).next().val(),
+                dataType: "json",
+                success: function (response) {
+                    $(tr).remove();
+                }
+            });
+            return false;
+        });
+
+    </script>
 
 
 
 </body>
 </html>
+@section scripts{
+    
+   
+    
+    }
