@@ -81,7 +81,40 @@ namespace WebApplication5.Controllers
             }
         }
 
-
+        /// <summary>
+        /// 依訂單ID取得訂單資料的畫面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet()]
+        public ActionResult Update(string id)
+        {
+            Models.Order order = this.orderService.GetOrderById(id);
+            order.OrderDetails = this.orderDetailsService.GetOrderByOrderId(id);
+            ViewBag.EmpCodeData = this.codeService.GetEmp(-1);
+            ViewBag.ShipCodeData = this.codeService.GetShipper(-1);
+            ViewBag.CustCodeData = this.codeService.GetCustomer(-1);
+            ViewBag.OrderDate = string.Format("{0:yyyy-MM-dd}", order.Orderdate);
+            ViewBag.RequireDdate = string.Format("{0:yyyy-MM-dd}", order.RequireDdate);
+            ViewBag.ShippedDate = string.Format("{0:yyyy-MM-dd}", order.ShippedDate);
+            ViewBag.ProductCodeData = this.codeService.GetProduct();
+            ViewBag.OrderData = order;
+            return View(order);
+        }
+        /// <summary>
+        /// 修改訂單存檔的Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost()]
+        public ActionResult Update(Models.Order order)
+        {
+            orderService.UpdateOrder(order);
+            orderDetailsService.UpdateOrderDeail(order.OrderDetails, order.OrderId);
+            ViewBag.EmpCodeData = this.codeService.GetEmp(-1);
+            ViewBag.ShipCodeData = this.codeService.GetShipper(-1);
+            return View("Index");
+        }
 
 
 

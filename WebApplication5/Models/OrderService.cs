@@ -87,7 +87,78 @@ namespace WebApplication5.Models
             }
         }
 
+        /// <summary>
+        /// 修改訂單
+        /// </summary>
+        public void UpdateOrder(Models.Order order)
+        {
+            try
+            {
+                string sql = @"UPDATE Sales.Orders SET 
+	                        CustomerID=@custid,EmployeeID=@empid,orderdate=@orderdate,requireddate=@requireddate,
+                            shippeddate=@shippeddate,shipperid=@shipperid,freight=@freight,shipname=@shipname,
+                            shipaddress=@shipaddress,shipcity=@shipcity,shipregion=@shipregion,
+                            shippostalcode=@shippostalcode,shipcountry=@shipcountry                          
+                            WHERE orderid=@orderid";
+                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@OrderId", order.OrderId));
+                    cmd.Parameters.Add(new SqlParameter("@CustomerID", order.CustomerID));
+                    cmd.Parameters.Add(new SqlParameter("@EmployeeID", order.EmployeeID));
+                    cmd.Parameters.Add(new SqlParameter("@Orderdate", order.Orderdate));
+                    cmd.Parameters.Add(new SqlParameter("@RequireDdate", order.RequireDdate));
+                    cmd.Parameters.Add(new SqlParameter("@ShippedDate", order.ShippedDate));
+                    cmd.Parameters.Add(new SqlParameter("@ShipperId", order.ShipperId));
+                    cmd.Parameters.Add(new SqlParameter("@Freight", order.Freight));
+                    cmd.Parameters.Add(new SqlParameter("@ShipName", order.ShipName));
+                    cmd.Parameters.Add(new SqlParameter("@ShipAddress", order.ShipAddress));
+                    cmd.Parameters.Add(new SqlParameter("@ShipCity", order.ShipCity));
+                    cmd.Parameters.Add(new SqlParameter("@ShipRegion", order.ShipRegion));
+                    cmd.Parameters.Add(new SqlParameter("@ShipPostalCode", order.ShipPostalCode));
+                    cmd.Parameters.Add(new SqlParameter("@ShipCountry", order.ShipCountry));
 
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        /// <summary>
+        /// 依照訂單ID取得訂單資料
+        /// </summary>
+        /// <param name="id">訂單ID</param>
+        /// <returns></returns>
+        public Models.Order GetOrderById(string orderId)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT 
+					A.OrderId,B.CustomerID,B.Companyname,
+					C.lastname+ C.firstname As EmpName,C.EmployeeID,
+					A.Orderdate,A.RequireDdate,A.ShippedDate,
+					D.CompanyName AS Sname,D.ShipperID ,
+					A.ShipName
+					From Sales.Orders As A 
+					JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
+					JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
+					JOIN Sales.Shippers As D ON A.shipperid=D.shipperid
+                    WHERE A.OrderId = @OrderId";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@OrderId", orderId));
+
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            return this.MapOrderDataToList(dt).FirstOrDefault();
+        }
 
 
 

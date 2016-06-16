@@ -61,6 +61,12 @@ namespace WebApplication5.Models
         [DisplayName("出貨日期")]
         public DateTime? ShippedDate { get; set; }
 
+          /// <summary>
+        /// 出貨公司代號
+        /// </summary>
+
+        [DisplayName("出貨公司代號")]
+        public int ShipperId { get; set; }
 
         /// <summary>
         /// 需要日期

@@ -1,0 +1,262 @@
+﻿@model WebApplication5.Models.Order
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Update</title>
+</head>
+<body>
+    <h2>修改訂單</h2>
+   @using (Html.BeginForm())
+   {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <table class="table table-bordered">
+            <tr>
+                <td>@Html.LabelFor(model => model.OrderId)</td>
+                <td colspan="3">
+                    @Html.EditorFor(model => model.OrderId, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.OrderId, @readonly = true, @type = "text" } })
+                    @Html.ValidationMessageFor(model => model.OrderId)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.CustomerID)
+                </td>
+                <td colspan="3">
+                    @Html.DropDownList("CustomerID", (List<SelectListItem>)ViewBag.CustCodeData)
+                    @Html.ValidationMessageFor(model => model.CustomerID)
+                    @*<select name="CustId" required>
+                            <option selected value="@ViewBag.OrderData.CustId">@ViewBag.OrderData.CustName</option>
+                            @foreach (var item in (List<SelectListItem>)ViewBag.CustCodeData)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>*@
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.EmployeeID)</td>
+                <td>
+                    @Html.DropDownList("EmpId", (List<SelectListItem>)ViewBag.EmpCodeData)
+                    @Html.ValidationMessageFor(model => model.EmployeeID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Orderdate)</td>
+                <td>
+                    @Html.TextBoxFor(model => model.Orderdate, new { @type = "date", @Value = ViewBag.OrderDate })
+                    @Html.ValidationMessageFor(model => model.Orderdate)
+                </td>
+                <td>@Html.LabelFor(model => model.RequireDdate)</td>
+                <td>
+                    @Html.TextBoxFor(model => model.RequireDdate, new { @type = "date", @Value = ViewBag.RequireDdate })
+                    @Html.ValidationMessageFor(model => model.RequireDdate)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ShippedDate)</td>
+                <td>
+                    @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @Value = ViewBag.ShippedDate })
+                    @Html.ValidationMessageFor(model => model.ShippedDate)
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ShipperId)</td>
+                <td>
+                    @Html.DropDownList("ShipperId", (List<SelectListItem>)ViewBag.ShipCodeData)
+                    @Html.ValidationMessageFor(model => model.ShipperId)
+                </td>
+                <td>@Html.LabelFor(model => model.Freight)</td>
+                <td>
+                    @Html.EditorFor(model => model.Freight, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.Freight, @type = "number" } })
+                    @Html.ValidationMessageFor(model => model.Freight)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ShipCountry)</td>
+                <td>
+                    @Html.EditorFor(model => model.ShipCountry, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.ShipCountry } })
+                    @Html.ValidationMessageFor(model => model.ShipCountry)
+                </td>
+                <td>@Html.LabelFor(model => model.ShipCity)</td>
+                <td>
+                    @Html.EditorFor(model => model.ShipCity, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.ShipCity } })
+                    @Html.ValidationMessageFor(model => model.ShipCity)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ShipRegion)</td>
+                <td>
+                    @Html.EditorFor(model => model.ShipRegion, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.ShipRegion } })
+                    @Html.ValidationMessageFor(model => model.ShipRegion)
+                </td>
+                <td>@Html.LabelFor(model => model.ShipPostalCode)</td>
+                <td>
+                    @Html.EditorFor(model => model.ShipPostalCode, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.ShipPostalCode } })
+                    @Html.ValidationMessageFor(model => model.ShipPostalCode)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ShipAddress)</td>
+                <td>
+                    @Html.EditorFor(model => model.ShipAddress, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.ShipAddress } })
+                    @Html.ValidationMessageFor(model => model.ShipAddress)
+                </td>
+                <td>@Html.LabelFor(model => model.ShipName)</td>
+                <td>
+                    @Html.EditorFor(model => model.ShipName, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.OrderData.ShipName } })
+                    @Html.ValidationMessageFor(model => model.ShipName)
+                </td>
+            </tr>
+            <tr>
+                <td><label>訂單金額總計</label></td>
+                <td id="total">$ 0.00</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="存檔" />
+                    @Html.ActionLink("回前一頁", "Index")
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <a id="addNewDetial" href="#">新增一筆</a>
+        <table class="table table-bordered">
+            <tr>
+                <td>商品</td>
+                <td>單價</td>
+                <td>數量</td>
+                <td>小計</td>
+                <td></td>
+            </tr>
+            <tbody id="tbContent">
+                @foreach (var item in (Model.OrderDetails))
+                {
+                    <tr>
+                        @*<td>@Html.DropDownListFor(m => Model.OrderDetails[0].ProductId, (List<SelectListItem>)ViewBag.ProductCodeData, new { @class = "ProductId", @Value = item.ProductId })</td>*@
+                        <td>@Html.TextBoxFor(m => Model.OrderDetails[0].ProductName, new { @class = "ProductName", @Value = item.ProductName, @readonly = true })</td>
+                        <td>@Html.TextBoxFor(m => Model.OrderDetails[0].UnitPrice, new { @class = "UnitPrice", @Value = item.UnitPrice, Type = "number" })</td>
+                        <td>@Html.TextBoxFor(m => Model.OrderDetails[0].Qty, new { @class = "Qty", @Value = item.Qty, Type = "number" })</td>
+                        <td>$ @((@item.UnitPrice * @item.Qty).ToString("#,###.00"))</td>
+                        <td>
+                            <button type="button" class="btnOrderDetailRemove" value=@item.ProductId>刪除</button>
+                            <input class="hidOrderId" type="hidden" value='@item.OrderId' />
+                            @Html.TextBoxFor(m => Model.OrderDetails[0].ProductId, new { @class = "ProductId", @Value = item.ProductId, @type = "hidden" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tbody id="trtemplate" style="display:none;">
+                <tr>
+                    <td>@Html.DropDownListFor(m => Model.OrderDetails[0].ProductId, (List<SelectListItem>)ViewBag.ProductCodeData, new { @class = "ProductId" })</td>
+                    <td>@Html.TextBoxFor(m => Model.OrderDetails[0].UnitPrice, new { @class = "UnitPrice", @Value = 0, Type = "number" })</td>
+                    <td>@Html.TextBoxFor(m => Model.OrderDetails[0].Qty, new { @class = "Qty", @Value = 1, Type = "number" })</td>
+                    <td>$ 0.00</td>
+                    <td>
+                        @Html.TextBoxFor(m => Model.OrderDetails[0].ProductName, new { @class = "ProductName", @type = "hidden", @Value = "" })
+                        <button type="button" class="btnRemove">刪除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+   }
+</body>
+</html>
+@section scripts{
+    <script type="text/javascript">
+        //總金額加總
+        function sumMoney() {
+            var sum = 0;
+            for (var i = 0 ; i < $('#tbContent tr').length; i++) {
+                sum += ($('.Qty').eq(i).val() * $('.UnitPrice').eq(i).val()).valueOf();
+            }
+            $("#total").html('$ ' + kendo.toString(sum,"n"));
+        }
+
+        //小計加總
+        function subTotal() {
+            var price = $(this)[0].parentNode.parentNode.children[1].children[0].value;
+            var qty = $(this)[0].parentNode.parentNode.children[2].children[0].value;
+            var subtotal = $(this)[0].parentNode.parentNode.children[3];
+            subtotal.innerHTML = '$ ' + kendo.toString(price * qty, "n");
+            sumMoney();
+        }
+
+        //當數量、單價改變時 重算小計
+        $('#tbContent').on('keyup', '[type=number]', subTotal);
+        $('#tbContent').on('change', '[type=number]', subTotal);
+
+        //明細資料範本
+        var trtemplate = $('#trtemplate tr').eq(0).html();
+
+        //新增一列名資料
+        $("#addNewDetial").click(function (e) {
+            $('#tbContent').append('<tr>' + trtemplate + '</tr>');
+        });
+
+        //移除OrderDetail + TR
+        $('#tbContent').on('click', '.btnOrderDetailRemove', function (e) {
+            if ($('#tbContent tr').length > 1) {
+                console.log($(this).val());
+                var tr = $(this).closest('tr')
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/DeleteOrderDetail",
+                    data: {
+                        orderId: $(this).next().val(),
+                        productId: $(this).val()
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $(tr).remove();
+                    }
+                });
+                return false;
+            }
+        });
+
+        //移除TR
+        $('#tbContent').on('click', '.btnRemove', function () {
+            if ($('#tbContent tr').length > 1)
+                $(this).closest('tr').remove();
+        });
+
+        //表單送出前置換element name 讓Action 可以讀到OrderDetials
+        $('form').submit(function () {
+            for (var i = 0 ; i < $('#tbContent tr').length; i++) {
+                $('.ProductId').eq(i).attr('name', 'OrderDetails[' + i + '].ProductId');
+                $('.Qty').eq(i).attr('name', 'OrderDetails[' + i + '].Qty');
+                $('.UnitPrice').eq(i).attr('name', 'OrderDetails[' + i + '].UnitPrice');
+            }
+        });
+
+        //初始總金額
+        $(document).ready(sumMoney());
+    </script>
+}

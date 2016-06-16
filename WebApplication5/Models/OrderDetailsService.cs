@@ -181,9 +181,9 @@ namespace WebApplication5.Models
                     OrderId = (int)row["OrderID"],
                     ProductName = (string)row["ProductName"],
                     ProductId = (int)row["ProductID"],
-                    UnitPrice = (int)row["UnitPrice"],
-                    Qty = (short)row["Qty"],
-                    Discount = (int)row["Discount"]
+                    UnitPrice = (decimal)row["UnitPrice"],
+                    Qty = Convert.ToInt16(row["Qty"]),
+                    Discount = Convert.ToDecimal((decimal)row["Discount"])
                 });
             }
             return result;
